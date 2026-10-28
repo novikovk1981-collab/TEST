@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Подпись берётся из keystore.properties (см. README). Если файла нет — сборка
+// автоматически подписывается debug-ключом, чтобы APK всё равно установился.
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def hasReleaseKey = keystoreProps.containsKey("storeFile")
+
+android {
+    namespace 'ru.vzlet.kb'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ru.vzlet.kb"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        // Адрес приложения Glide. Меняется здесь — и только здесь.
+        buildConfigField "String", "START_URL",
+                "\"https://nifty-tin-9130.glide.page/dl/00d90a\""
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseKey) {
+                storeFile rootProject.file(keystoreProps["storeFile"])
+                storePassword keystoreProps["storePassword"]
+                keyAlias keystoreProps["keyAlias"]
+                keyPassword keystoreProps["keyPassword"]
+            }
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig hasReleaseKey ? signingConfigs.release : signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+    }
+}

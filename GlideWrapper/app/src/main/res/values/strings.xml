@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ВЗЛЁТ</string>
+    <string name="error_title">Нет подключения</string>
+    <string name="error_message">Приложение работает через интернет.\nПроверьте сеть и попробуйте снова.</string>
+    <string name="retry">Повторить</string>
+    <string name="no_app">Не найдено приложение для открытия ссылки</string>
+    <string name="pick_file">Выберите файл</string>
+    <string name="download_started">Загрузка началась</string>
+    <string name="download_failed">Не удалось скачать файл</string>
+</resources>
